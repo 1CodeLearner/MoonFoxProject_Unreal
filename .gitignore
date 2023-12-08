@@ -73,6 +73,9 @@ DerivedDataCache/*
 **/Plugins/**/Binaries/*
 **/Plugins/**/Saved/*
 
+# StarterContent folder
+Content/StarterContent/*
+
 # Temp Files
 Config/DefaultEditorPerProjectUserSettings.ini
 
