@@ -1,11 +1,14 @@
 	// Fill out your copyright notice in the Description page of Project Settings.
 
 
+
 #include "MWBaseProjectile.h"
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "MWProjectileInteractable.h"
+
+
 
 // Sets default values
 AMWBaseProjectile::AMWBaseProjectile()
@@ -18,6 +21,8 @@ AMWBaseProjectile::AMWBaseProjectile()
 	ParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ParticleSystemComp"));
 	ParticleSystem->SetupAttachment(RootComponent);
 	ProjectileMoveComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
+	ProjectileMoveComp->Velocity = FVector(FlightSpeed, 0.f, 0.f);
+	ProjectileMoveComp->ProjectileGravityScale = 0.f;
 }
 
 // Called when the game starts or when spawned
@@ -29,7 +34,7 @@ void AMWBaseProjectile::BeginPlay()
 
 void AMWBaseProjectile::DurationEnd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Testing if it runs first"));
+	Destroy();
 }
 
 

@@ -35,7 +35,7 @@ protected:
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile")
-	float FlightSpeed = 100;
+	float FlightSpeed = 1500.f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	FName Name = "DefaultName";
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
