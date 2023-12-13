@@ -32,11 +32,10 @@ void AMWBaseProjectile::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(DurationHandle, this, &AMWBaseProjectile::DurationEnd, FlightDuration, false);
 }
 
-void AMWBaseProjectile::DurationEnd()
+void AMWBaseProjectile::DurationEnd_Implementation()
 {
 	Destroy();
 }
-
 
 void AMWBaseProjectile::PreInitializeComponents()
 {
