@@ -19,6 +19,10 @@ public:
 	// Sets default values for this actor's properties
 	AMWBaseProjectile();
 
+	UFUNCTION(BlueprintPure, Category = "Projectile")
+	virtual float GetDamage() const;
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	void SetDamage(float Damage);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,10 +42,13 @@ protected:
 	float FlightSpeed = 1500.f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	FName Name = "DefaultName";
-	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	float FlightDuration = 10.f;
+	UFUNCTION(BlueprintNativeEvent, Category = "Projectile")
+	void DurationEnd();
+
 private:
 	FTimerHandle DurationHandle;
-	UFUNCTION()
-	void DurationEnd();
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"), Category = "Projectile")
+	float Damage = 10.f;
 };
