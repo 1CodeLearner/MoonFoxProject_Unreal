@@ -16,6 +16,6 @@ void AMWPlayerProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AA
 {
 	if (OtherActor->Implements<UMWProjectileInteractable>()) 
 	{
-		IMWProjectileInteractable::Execute_Interact(OtherActor, this);
+		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor, this);
 	}
 }
