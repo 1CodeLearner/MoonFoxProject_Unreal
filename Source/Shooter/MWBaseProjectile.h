@@ -38,10 +38,9 @@ protected:
 	float FlightSpeed = 1500.f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	FName Name = "DefaultName";
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Duration")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	float FlightDuration = 10.f;
-	UFUNCTION(BlueprintNativeEvent, Category = "Duration")
+	UFUNCTION(BlueprintNativeEvent, Category = "Projectile")
 	void DurationEnd();
 private:
 	FTimerHandle DurationHandle;
