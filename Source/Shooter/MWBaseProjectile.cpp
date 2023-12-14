@@ -25,6 +25,16 @@ AMWBaseProjectile::AMWBaseProjectile()
 	ProjectileMoveComp->ProjectileGravityScale = 0.f;
 }
 
+float AMWBaseProjectile::GetDamage() const
+{
+	return Damage;
+}
+
+void AMWBaseProjectile::SetDamage(float _Damage)
+{
+	Damage = _Damage;
+}
+
 // Called when the game starts or when spawned
 void AMWBaseProjectile::BeginPlay()
 {
@@ -43,7 +53,7 @@ void AMWBaseProjectile::PreInitializeComponents()
 	APawn* InstigatePawn = GetInstigator();
 	if (InstigatePawn)
 	{
-		if (InstigatePawn->IsMoveInputIgnored()) 
+		if (!InstigatePawn->IsMoveInputIgnored()) 
 		{
 			InstigatePawn->MoveIgnoreActorAdd(this);
 		}
