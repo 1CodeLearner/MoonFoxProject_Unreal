@@ -4,6 +4,13 @@
 #include "MWEnemyProjectile.h"
 #include "Components/SphereComponent.h"
 
+AMWEnemyProjectile::AMWEnemyProjectile()
+{
+	SphereComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
+	SphereComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
+	SphereComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
+}
+
 void AMWEnemyProjectile::PreInitializeComponents()
 {
 	Super::PreInitializeComponents();

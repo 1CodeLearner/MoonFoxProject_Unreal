@@ -21,7 +21,8 @@ AMWBaseProjectile::AMWBaseProjectile()
 	ParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ParticleSystemComp"));
 	ParticleSystem->SetupAttachment(RootComponent);
 	ProjectileMoveComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
-	ProjectileMoveComp->Velocity = FVector(FlightSpeed, 0.f, 0.f);
+	UE_LOG(LogTemp, Warning, TEXT("%s's FlightSpeed: %f"), *GetNameSafe(this), FlightSpeed);
+	ProjectileMoveComp->InitialSpeed = FlightSpeed;
 	ProjectileMoveComp->ProjectileGravityScale = 0.f;
 }
 
