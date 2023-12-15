@@ -3,6 +3,7 @@
 
 #include "MWEnemyProjectile.h"
 #include "Components/SphereComponent.h"
+#include "MWProjectileInteractable.h"
 
 AMWEnemyProjectile::AMWEnemyProjectile()
 {
@@ -21,6 +22,7 @@ void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 {
 	if (OtherActor->ActorHasTag("Player")) 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Im Destroying Player from %s"), *GetNameSafe(this));
+		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor,GetInstigator(), GetDamage() );
+		Destroy();
 	}
 }
