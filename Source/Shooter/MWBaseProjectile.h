@@ -24,9 +24,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	void SetDamage(float Damage);
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	virtual void PreInitializeComponents() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
@@ -36,19 +33,11 @@ protected:
 	UNiagaraComponent* ParticleSystem;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	UProjectileMovementComponent* ProjectileMoveComp;
-	
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile")
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
 	float FlightSpeed = 0.f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
-	FName Name = "DefaultName";
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
-	float FlightDuration = 10.f;
-	UFUNCTION(BlueprintNativeEvent, Category = "Projectile")
-	void DurationEnd();
 
 private:
-	FTimerHandle DurationHandle;
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"), Category = "Projectile")
 	float Damage = 10.f;
 };

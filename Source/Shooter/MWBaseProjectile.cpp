@@ -6,8 +6,6 @@
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "MWProjectileInteractable.h"
-
 
 
 // Sets default values
@@ -34,18 +32,6 @@ float AMWBaseProjectile::GetDamage() const
 void AMWBaseProjectile::SetDamage(float _Damage)
 {
 	Damage = _Damage;
-}
-
-// Called when the game starts or when spawned
-void AMWBaseProjectile::BeginPlay()
-{
-	Super::BeginPlay();
-	GetWorld()->GetTimerManager().SetTimer(DurationHandle, this, &AMWBaseProjectile::DurationEnd, FlightDuration, false);
-}
-
-void AMWBaseProjectile::DurationEnd_Implementation()
-{
-	Destroy();
 }
 
 void AMWBaseProjectile::PreInitializeComponents()
