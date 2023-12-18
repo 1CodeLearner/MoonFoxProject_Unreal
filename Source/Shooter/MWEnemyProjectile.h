@@ -13,8 +13,10 @@ UCLASS()
 class SHOOTER_API AMWEnemyProjectile : public AMWBaseProjectile
 {
 	GENERATED_BODY()
-	
+public:
+	AMWEnemyProjectile();
 protected:
+	
 	virtual void PreInitializeComponents() override;
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent,
