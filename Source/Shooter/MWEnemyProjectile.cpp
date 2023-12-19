@@ -3,6 +3,14 @@
 
 #include "MWEnemyProjectile.h"
 #include "Components/SphereComponent.h"
+#include "MWProjectileInteractable.h"
+
+AMWEnemyProjectile::AMWEnemyProjectile()
+{
+	SphereComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
+	SphereComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
+	SphereComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
+}
 
 void AMWEnemyProjectile::PreInitializeComponents()
 {
@@ -14,6 +22,7 @@ void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 {
 	if (OtherActor->ActorHasTag("Player")) 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Im Destroying Player from %s"), *GetNameSafe(this));
+		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor,GetInstigator(), GetDamage() );
+		Destroy();
 	}
 }

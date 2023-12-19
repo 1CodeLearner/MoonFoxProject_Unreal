@@ -14,7 +14,7 @@ class SHOOTER_API AMWPlayerProjectile : public AMWBaseProjectile
 {
 	GENERATED_BODY()
 protected:
-	AMWPlayerProjectile() = default;
+	AMWPlayerProjectile();
 	virtual void PreInitializeComponents() override;
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent,

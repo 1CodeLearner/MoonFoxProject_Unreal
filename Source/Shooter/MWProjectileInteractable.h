@@ -24,5 +24,5 @@ class SHOOTER_API IMWProjectileInteractable
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent)
-	void ProjectileInteract(AMWBaseProjectile* Invoker);
+	void ProjectileInteract(AActor* Instigate, float Damage);
 };
