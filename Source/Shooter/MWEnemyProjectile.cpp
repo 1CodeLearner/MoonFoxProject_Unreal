@@ -4,6 +4,7 @@
 #include "MWEnemyProjectile.h"
 #include "Components/SphereComponent.h"
 #include "MWProjectileInteractable.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 AMWEnemyProjectile::AMWEnemyProjectile()
 {
@@ -24,4 +25,12 @@ void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	{
 		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor,GetInstigator(), GetDamage() );
 	}
+}
+
+void AMWEnemyProjectile::Fire(FTransform Transform)
+{
+	//Set velocity too Flight Speed
+	SetActorTransform(Transform, false);
+	FVector Velocity = FVector(FlightSpeed, 0.f, 0.f);
+	ProjectileMoveComp->SetVelocityInLocalSpace(Velocity);
 }

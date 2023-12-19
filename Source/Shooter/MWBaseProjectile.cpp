@@ -20,7 +20,6 @@ AMWBaseProjectile::AMWBaseProjectile()
 	ParticleSystem->SetupAttachment(RootComponent);
 	ProjectileMoveComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
 	UE_LOG(LogTemp, Warning, TEXT("%s's FlightSpeed: %f"), *GetNameSafe(this), FlightSpeed);
-	ProjectileMoveComp->InitialSpeed = FlightSpeed;
 	ProjectileMoveComp->ProjectileGravityScale = 0.f;
 }
 
