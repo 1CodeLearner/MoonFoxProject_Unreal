@@ -6,7 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-
+#include "NiagaraSystem.h"
 
 // Sets default values
 AMWBaseProjectile::AMWBaseProjectile()
@@ -18,8 +18,8 @@ AMWBaseProjectile::AMWBaseProjectile()
 	RootComponent = SphereComponent;
 	ParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ParticleSystemComp"));
 	ParticleSystem->SetupAttachment(RootComponent);
+	ParticleSystem->SetAutoActivate(false);
 	ProjectileMoveComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
-	UE_LOG(LogTemp, Warning, TEXT("%s's FlightSpeed: %f"), *GetNameSafe(this), FlightSpeed);
 	ProjectileMoveComp->ProjectileGravityScale = 0.f;
 }
 

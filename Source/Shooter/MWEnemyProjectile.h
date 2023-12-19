@@ -17,7 +17,7 @@ class SHOOTER_API AMWEnemyProjectile : public AMWBaseProjectile
 public:
 	AMWEnemyProjectile();
 protected:
-
+	virtual void BeginPlay() override;
 	virtual void PreInitializeComponents() override;
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent,
@@ -26,8 +26,8 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	virtual void Fire(FTransform Transform);
+	
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	void Reset();
 
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
-	TObjectPtr<UNiagaraSystem> NiagaraAsset;
 };

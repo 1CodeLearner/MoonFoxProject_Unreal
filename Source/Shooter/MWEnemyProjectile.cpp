@@ -5,12 +5,20 @@
 #include "Components/SphereComponent.h"
 #include "MWProjectileInteractable.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "NiagaraComponent.h"
 
 AMWEnemyProjectile::AMWEnemyProjectile()
 {
 	SphereComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
 	SphereComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
 	SphereComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AMWEnemyProjectile::BeginPlay()
+{
+	Super::BeginPlay();
+	SetActorTickEnabled(false);
 }
 
 void AMWEnemyProjectile::PreInitializeComponents()
@@ -24,6 +32,7 @@ void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	if (OtherActor->ActorHasTag("Player") && OtherActor->Implements<UMWProjectileInteractable>()) 
 	{
 		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor,GetInstigator(), GetDamage() );
+		Reset();
 	}
 }
 
@@ -33,5 +42,16 @@ void AMWEnemyProjectile::Fire(FTransform Transform)
 	SetActorTransform(Transform, false);
 	FVector Velocity = FVector(FlightSpeed, 0.f, 0.f);
 	ProjectileMoveComp->SetVelocityInLocalSpace(Velocity);
+	ParticleSystem->Activate();
 	UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(GetInstigator()));
+}
+
+void AMWEnemyProjectile::Reset()
+{
+	if (GetInstigator())
+	{
+		ParticleSystem->Deactivate();
+		FVector Location = GetInstigator()->GetActorLocation();
+		SetActorLocation(Location);
+	}
 }
