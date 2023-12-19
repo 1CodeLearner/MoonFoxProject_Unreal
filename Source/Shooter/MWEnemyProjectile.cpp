@@ -33,4 +33,5 @@ void AMWEnemyProjectile::Fire(FTransform Transform)
 	SetActorTransform(Transform, false);
 	FVector Velocity = FVector(FlightSpeed, 0.f, 0.f);
 	ProjectileMoveComp->SetVelocityInLocalSpace(Velocity);
+	UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(GetInstigator()));
 }
