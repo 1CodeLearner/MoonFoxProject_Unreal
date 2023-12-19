@@ -21,6 +21,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "Landmass",
+			"Enabled": true
 		}
 	]
 }
