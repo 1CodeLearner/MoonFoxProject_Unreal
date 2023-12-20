@@ -9,13 +9,14 @@
 class USphereComponent;
 class UNiagaraComponent;
 class UProjectileMovementComponent;
+class UNiagaraSystem;
 
 UCLASS(ABSTRACT)
 class SHOOTER_API AMWBaseProjectile : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AMWBaseProjectile();
 
@@ -23,32 +24,25 @@ public:
 	virtual float GetDamage() const;
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	void SetDamage(float Damage);
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
+protected:
 	virtual void PreInitializeComponents() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	USphereComponent* SphereComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	UNiagaraComponent* ParticleSystem;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
-	UProjectileMovementComponent* ProjectileMoveComp;
-	
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile")
-	float FlightSpeed = 0.f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
-	FName Name = "DefaultName";
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
-	float FlightDuration = 10.f;
-	UFUNCTION(BlueprintNativeEvent, Category = "Projectile")
-	void DurationEnd();
 
-private:
-	FTimerHandle DurationHandle;
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"), Category = "Projectile")
-	float Damage = 10.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	TObjectPtr<UNiagaraSystem> NiagaraAsset;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
+	UProjectileMovementComponent* ProjectileMoveComp;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	float FlightSpeed = 0.f;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	float Damage = 0.f;
 };
