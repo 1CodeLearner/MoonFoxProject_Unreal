@@ -31,11 +31,11 @@ void AMWEnemyProjectile::PreInitializeComponents()
 
 void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->ActorHasTag("Player") && OtherActor->Implements<UMWProjectileInteractable>())
+	if (OtherActor->Implements<UMWProjectileInteractable>())
 	{
 		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor, GetInstigator(), GetDamage());
-		Reset();
 	}
+	Reset();
 }
 
 void AMWEnemyProjectile::Fire(FTransform Transform)
