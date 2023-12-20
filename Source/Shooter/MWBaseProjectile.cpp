@@ -1,4 +1,4 @@
-	// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 
@@ -11,7 +11,7 @@
 // Sets default values
 AMWBaseProjectile::AMWBaseProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
@@ -21,6 +21,20 @@ AMWBaseProjectile::AMWBaseProjectile()
 	ParticleSystem->SetAutoActivate(false);
 	ProjectileMoveComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
 	ProjectileMoveComp->ProjectileGravityScale = 0.f;
+}
+
+void AMWBaseProjectile::PreInitializeComponents()
+{
+	Super::PreInitializeComponents();
+	APawn* InstigatePawn = GetInstigator();
+	if (InstigatePawn)
+	{
+		if (!InstigatePawn->IsMoveInputIgnored())
+		{
+			InstigatePawn->MoveIgnoreActorAdd(this);
+		}
+		SphereComponent->IgnoreActorWhenMoving(InstigatePawn, true);
+	}
 }
 
 float AMWBaseProjectile::GetDamage() const
@@ -33,16 +47,3 @@ void AMWBaseProjectile::SetDamage(float _Damage)
 	Damage = _Damage;
 }
 
-void AMWBaseProjectile::PreInitializeComponents()
-{
-	Super::PreInitializeComponents();
-	APawn* InstigatePawn = GetInstigator();
-	if (InstigatePawn)
-	{
-		if (!InstigatePawn->IsMoveInputIgnored()) 
-		{
-			InstigatePawn->MoveIgnoreActorAdd(this);
-		}
-		SphereComponent->IgnoreActorWhenMoving(InstigatePawn, true);
-	}
-}

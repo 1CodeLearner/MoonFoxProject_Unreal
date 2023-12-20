@@ -28,21 +28,21 @@ public:
 protected:
 	virtual void PreInitializeComponents() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	USphereComponent* SphereComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	UNiagaraComponent* ParticleSystem;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
 	TObjectPtr<UNiagaraSystem> NiagaraAsset;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	UProjectileMovementComponent* ProjectileMoveComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
 	float FlightSpeed = 0.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
 	float Damage = 0.f;
 };

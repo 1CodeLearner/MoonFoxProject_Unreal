@@ -26,8 +26,14 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	virtual void Fire(FTransform Transform);
-	
+
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	void Reset();
 
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	float FlightDuration;
+private:
+	UPROPERTY()
+	FTimerHandle ResetHandle;
 };

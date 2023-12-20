@@ -12,13 +12,15 @@ AMWEnemyProjectile::AMWEnemyProjectile()
 	SphereComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
 	SphereComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
 	SphereComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
-	PrimaryActorTick.bCanEverTick = true;
+
+	FlightDuration = 20.f;
 }
 
 void AMWEnemyProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	SetActorTickEnabled(false);
+	SetActorHiddenInGame(true);
+	Reset();
 }
 
 void AMWEnemyProjectile::PreInitializeComponents()
@@ -29,29 +31,46 @@ void AMWEnemyProjectile::PreInitializeComponents()
 
 void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->ActorHasTag("Player") && OtherActor->Implements<UMWProjectileInteractable>()) 
+	if (OtherActor->ActorHasTag("Player") && OtherActor->Implements<UMWProjectileInteractable>())
 	{
-		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor,GetInstigator(), GetDamage() );
+		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor, GetInstigator(), GetDamage());
 		Reset();
 	}
 }
 
 void AMWEnemyProjectile::Fire(FTransform Transform)
 {
-	//Set velocity too Flight Speed
-	SetActorTransform(Transform, false);
-	FVector Velocity = FVector(FlightSpeed, 0.f, 0.f);
-	ProjectileMoveComp->SetVelocityInLocalSpace(Velocity);
+	SetActorHiddenInGame(false);
+	SetActorTickEnabled(true);
+
+	SetActorTransform(Transform);
+	ProjectileMoveComp->SetVelocityInLocalSpace(FVector(FlightSpeed, 0.f, 0.f));
+
 	ParticleSystem->Activate();
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+	GetWorld()->GetTimerManager().SetTimer(ResetHandle, this, &AMWEnemyProjectile::Reset, FlightDuration, false);
+
 	UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(GetInstigator()));
 }
 
 void AMWEnemyProjectile::Reset()
 {
-	if (GetInstigator())
+	APawn* testing = GetInstigator();
+
+	if (ensureMsgf(testing, TEXT("Instigator not found. Please assign Instigator when spawning projectiles.")))
 	{
+		if (ResetHandle.IsValid())
+			GetWorld()->GetTimerManager().ClearTimer(ResetHandle);
+
+		SetActorHiddenInGame(true);
+		SetActorTickEnabled(false);
+
+		SetActorLocation(GetInstigator()->GetActorLocation());
+		ProjectileMoveComp->SetVelocityInLocalSpace(FVector(0.f, 0.f, 0.f));
+
+		SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		ParticleSystem->Deactivate();
-		FVector Location = GetInstigator()->GetActorLocation();
-		SetActorLocation(Location);
 	}
+
 }
