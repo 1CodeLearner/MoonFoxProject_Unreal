@@ -7,8 +7,9 @@
 #include "MWEnemyProjectile.generated.h"
 
 /**
- * 
+ *
  */
+class UNiagaraSystem;
 UCLASS()
 class SHOOTER_API AMWEnemyProjectile : public AMWBaseProjectile
 {
@@ -16,10 +17,23 @@ class SHOOTER_API AMWEnemyProjectile : public AMWBaseProjectile
 public:
 	AMWEnemyProjectile();
 protected:
-	
+	virtual void BeginPlay() override;
 	virtual void PreInitializeComponents() override;
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	virtual void Fire(FTransform Transform);
+
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	void Reset();
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	float FlightDuration;
+private:
+	UPROPERTY()
+	FTimerHandle ResetHandle;
 };
