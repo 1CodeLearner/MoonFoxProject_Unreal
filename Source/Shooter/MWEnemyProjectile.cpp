@@ -9,30 +9,35 @@
 
 AMWEnemyProjectile::AMWEnemyProjectile()
 {
-	SphereComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
-	SphereComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
-	SphereComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
-
+	SphereComponent->SetCollisionProfileName("EnemyProjectile");
 	FlightDuration = 20.f;
+}
+
+void AMWEnemyProjectile::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AMWEnemyProjectile::OnOverlap);
 }
 
 void AMWEnemyProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	SetActorHiddenInGame(true);
+	IgnoreInstigatorActor();
 	Reset();
-}
-
-void AMWEnemyProjectile::PreInitializeComponents()
-{
-	Super::PreInitializeComponents();
-	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AMWEnemyProjectile::OnOverlap);
 }
 
 void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->Implements<UMWProjectileInteractable>())
+	const TArray<AActor*> Actors = OverlappedComponent->GetMoveIgnoreActors();
+
+	for (int i = 0; i < Actors.Max(); i++) {
+		UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(Actors[i]));
+	}
+	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *GetNameSafe(OtherActor));
+
+	if (OtherActor != GetInstigator() && OtherActor->Implements<UMWProjectileInteractable>())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *GetNameSafe(OtherActor));
 		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor, GetInstigator(), GetDamage());
 	}
 	Reset();
@@ -49,16 +54,14 @@ void AMWEnemyProjectile::Fire(FTransform Transform)
 	ParticleSystem->Activate();
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
-	GetWorld()->GetTimerManager().SetTimer(ResetHandle, this, &AMWEnemyProjectile::Reset, FlightDuration, false);
+	IgnoreInstigatorActor();
 
-	UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(GetInstigator()));
+	GetWorld()->GetTimerManager().SetTimer(ResetHandle, this, &AMWEnemyProjectile::Reset, FlightDuration, false);
 }
 
 void AMWEnemyProjectile::Reset()
 {
-	APawn* testing = GetInstigator();
-
-	if (ensureMsgf(testing, TEXT("Instigator not found. Please assign Instigator when spawning projectiles.")))
+	if (GetInstigator())
 	{
 		if (ResetHandle.IsValid())
 			GetWorld()->GetTimerManager().ClearTimer(ResetHandle);
@@ -72,5 +75,4 @@ void AMWEnemyProjectile::Reset()
 		SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		ParticleSystem->Deactivate();
 	}
-
 }

@@ -18,7 +18,7 @@ public:
 	AMWEnemyProjectile();
 protected:
 	virtual void BeginPlay() override;
-	virtual void PreInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
