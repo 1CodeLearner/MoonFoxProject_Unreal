@@ -26,7 +26,7 @@ public:
 	void SetDamage(float Damage);
 
 protected:
-	virtual void PreInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	USphereComponent* SphereComponent;
@@ -45,4 +45,7 @@ protected:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
 	float Damage = 0.f;
+
+protected:
+	void IgnoreInstigatorActor();
 };

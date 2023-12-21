@@ -23,12 +23,26 @@ AMWBaseProjectile::AMWBaseProjectile()
 	ProjectileMoveComp->ProjectileGravityScale = 0.f;
 }
 
-void AMWBaseProjectile::PreInitializeComponents()
+void AMWBaseProjectile::PostInitializeComponents()
 {
-	Super::PreInitializeComponents();
+	Super::PostInitializeComponents();
+}
+
+void AMWBaseProjectile::IgnoreInstigatorActor()
+{
 	APawn* InstigatePawn = GetInstigator();
-	if (InstigatePawn)
+
+	if (ensureMsgf(InstigatePawn, TEXT("Instigator not found. Please assign Instigator when spawning projectiles.")))
 	{
+		//UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(InstigatePawn));
+		if (!HasAnyFlags(InstigatePawn->GetFlags()))
+		{
+			APawn* Pawn = Cast<APawn>(InstigatePawn);
+			//UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR CASTED: %s"), *GetNameSafe(Pawn));
+		}
+		else {
+			//UE_LOG(LogTemp, Warning, TEXT("No flags found"));
+		}
 		if (!InstigatePawn->IsMoveInputIgnored())
 		{
 			InstigatePawn->MoveIgnoreActorAdd(this);
