@@ -30,6 +30,8 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	void Reset();
 
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	void EnableNiagara(bool enable);
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	float FlightDuration;
