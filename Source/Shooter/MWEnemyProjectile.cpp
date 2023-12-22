@@ -28,16 +28,15 @@ void AMWEnemyProjectile::BeginPlay()
 
 void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	const TArray<AActor*> Actors = OverlappedComponent->GetMoveIgnoreActors();
+	//const TArray<AActor*> Actors = OverlappedComponent->GetMoveIgnoreActors();
 
-	for (int i = 0; i < Actors.Max(); i++) {
-		UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(Actors[i]));
-	}
-	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *GetNameSafe(OtherActor));
+	//for (int i = 0; i < Actors.Max(); i++) {
+	//	UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(Actors[i]));
+	//}¡¡	
 
 	if (OtherActor != GetInstigator() && OtherActor->Implements<UMWProjectileInteractable>())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *GetNameSafe(OtherActor));
+		//UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *GetNameSafe(OtherActor));
 		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor, GetInstigator(), GetDamage());
 	}
 	Reset();
