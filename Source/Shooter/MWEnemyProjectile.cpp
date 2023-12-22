@@ -33,7 +33,6 @@ void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	for (int i = 0; i < Actors.Max(); i++) {
 		UE_LOG(LogTemp, Warning, TEXT("INSTIGATOR: %s"), *GetNameSafe(Actors[i]));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *GetNameSafe(OtherActor));
 
 	if (OtherActor != GetInstigator() && OtherActor->Implements<UMWProjectileInteractable>())
 	{
