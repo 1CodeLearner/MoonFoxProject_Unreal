@@ -10,7 +10,7 @@
 AMWEnemyProjectile::AMWEnemyProjectile()
 {
 	SphereComponent->SetCollisionProfileName("EnemyProjectile");
-	FlightDuration = 20.f;
+	FlightDuration = 5.f;
 }
 
 void AMWEnemyProjectile::PostInitializeComponents()
@@ -74,4 +74,12 @@ void AMWEnemyProjectile::Reset()
 		SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		ParticleSystem->Deactivate();
 	}
+}
+
+void AMWEnemyProjectile::EnableNiagara(bool enable)
+{
+	if (enable) {
+		ParticleSystem->Activate();
+	}
+	ParticleSystem->Deactivate();
 }
