@@ -6,7 +6,6 @@
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "NiagaraSystem.h"
 
 // Sets default values
 AMWBaseProjectile::AMWBaseProjectile()
@@ -53,14 +52,3 @@ void AMWBaseProjectile::IgnoreInstigatorActor()
 		SphereComponent->IgnoreActorWhenMoving(InstigatePawn, true);
 	}
 }
-
-float AMWBaseProjectile::GetDamage() const
-{
-	return Damage;
-}
-
-void AMWBaseProjectile::SetDamage(float _Damage)
-{
-	Damage = _Damage;
-}
-

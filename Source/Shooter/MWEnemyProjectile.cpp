@@ -37,9 +37,9 @@ void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	if (OtherActor != GetInstigator() && OtherActor->Implements<UMWProjectileInteractable>())
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *GetNameSafe(OtherActor));
-		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor, GetInstigator(), GetDamage());
+		IMWProjectileInteractable::Execute_ProjectileInteract(OtherActor, GetInstigator(), FDamageInfo);
 	}
-	Reset();
+	ResetState();
 }
 
 void AMWEnemyProjectile::Fire(FTransform Transform)
@@ -58,7 +58,7 @@ void AMWEnemyProjectile::Fire(FTransform Transform)
 	GetWorld()->GetTimerManager().SetTimer(ResetHandle, this, &AMWEnemyProjectile::Reset, FlightDuration, false);
 }
 
-void AMWEnemyProjectile::Reset()
+void AMWEnemyProjectile::ResetState()
 {
 	if (GetInstigator())
 	{
@@ -74,12 +74,4 @@ void AMWEnemyProjectile::Reset()
 		SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		ParticleSystem->Deactivate();
 	}
-}
-
-void AMWEnemyProjectile::EnableNiagara(bool enable)
-{
-	if (enable) {
-		ParticleSystem->Activate();
-	}
-	ParticleSystem->Deactivate();
 }
