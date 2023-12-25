@@ -6,9 +6,8 @@
 #include "MWBaseProjectile.h"
 #include "MWEnemyProjectile.generated.h"
 
-/**
- *
- */
+
+
 class UNiagaraSystem;
 UCLASS()
 class SHOOTER_API AMWEnemyProjectile : public AMWBaseProjectile
@@ -28,7 +27,7 @@ protected:
 	virtual void Fire(FTransform Transform);
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
-	void Reset();
+	void ResetState();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
