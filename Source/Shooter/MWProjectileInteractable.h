@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "MWBaseProjectile.h"
+#include "UMDamageSystem.h"
 #include "MWProjectileInteractable.generated.h"
 
 // This class does not need to be modified.
@@ -23,6 +23,6 @@ class SHOOTER_API IMWProjectileInteractable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent)
-	void ProjectileInteract(AActor* Instigate, float Damage);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ProjectileInteract(AActor* Instigate, FMWDamageInfo FDamageInfo);
 };

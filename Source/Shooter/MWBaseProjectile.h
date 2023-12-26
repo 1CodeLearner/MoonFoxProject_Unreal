@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "UMDamageSystem.h"
 #include "MWBaseProjectile.generated.h"
 
 class USphereComponent;
 class UNiagaraComponent;
 class UProjectileMovementComponent;
 class UNiagaraSystem;
+
 
 UCLASS(ABSTRACT)
 class SHOOTER_API AMWBaseProjectile : public AActor
@@ -19,11 +21,6 @@ class SHOOTER_API AMWBaseProjectile : public AActor
 public:
 	// Sets default values for this actor's properties
 	AMWBaseProjectile();
-
-	UFUNCTION(BlueprintPure, Category = "Projectile")
-	virtual float GetDamage() const;
-	UFUNCTION(BlueprintCallable, Category = "Projectile")
-	void SetDamage(float Damage);
 
 protected:
 	virtual void PostInitializeComponents() override;
@@ -40,11 +37,11 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	UProjectileMovementComponent* ProjectileMoveComp;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
 	float FlightSpeed = 0.f;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
-	float Damage = 0.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	FMWDamageInfo FDamageInfo;
 
 protected:
 	void IgnoreInstigatorActor();
