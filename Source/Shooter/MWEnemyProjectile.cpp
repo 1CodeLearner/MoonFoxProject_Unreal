@@ -55,7 +55,7 @@ void AMWEnemyProjectile::Fire(FTransform Transform)
 
 	IgnoreInstigatorActor();
 
-	GetWorld()->GetTimerManager().SetTimer(ResetHandle, this, &AMWEnemyProjectile::Reset, FlightDuration, false);
+	GetWorld()->GetTimerManager().SetTimer(ResetHandle, this, &AMWEnemyProjectile::ResetState, FlightDuration, false);
 }
 
 void AMWEnemyProjectile::ResetState()
