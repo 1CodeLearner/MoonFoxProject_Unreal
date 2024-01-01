@@ -11,6 +11,8 @@ AMWEnemyProjectile::AMWEnemyProjectile()
 {
 	SphereComponent->SetCollisionProfileName("EnemyProjectile");
 	FlightDuration = 5.f;
+	ActorToTarget = nullptr;
+	ResetValue = 0.7;
 }
 
 void AMWEnemyProjectile::PostInitializeComponents()
@@ -23,7 +25,19 @@ void AMWEnemyProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	IgnoreInstigatorActor();
-	Reset();
+	ResetState();
+}
+
+void AMWEnemyProjectile::Tick(float DeltaSecond)
+{
+	if (ProjectileMoveComp->bIsHomingProjectile && ActorToTarget)
+	{
+		float value = GetDotProductTo(ActorToTarget);
+		if (value < -.7f)
+		{
+			ResetState();
+		}
+	}
 }
 
 void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -42,25 +56,29 @@ void AMWEnemyProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	ResetState();
 }
 
-void AMWEnemyProjectile::Fire(FTransform Transform)
+void AMWEnemyProjectile::Fire(FTransform Transform, AActor* TargetActor)
 {
+	if (ProjectileMoveComp->bIsHomingProjectile && !TargetActor)
+		ensureMsgf(TargetActor, TEXT("TargetActor missing! if Homing Projectile, pass a reference to Target Actor!"));
+
 	SetActorHiddenInGame(false);
 	SetActorTickEnabled(true);
 
 	SetActorTransform(Transform);
-	ProjectileMoveComp->SetVelocityInLocalSpace(FVector(FlightSpeed, 0.f, 0.f));
+	UpdateProjectileComponent(true, TargetActor);
 
 	ParticleSystem->Activate();
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	IgnoreInstigatorActor();
 
-	GetWorld()->GetTimerManager().SetTimer(ResetHandle, this, &AMWEnemyProjectile::ResetState, FlightDuration, false);
+	if (!ProjectileMoveComp->bIsHomingProjectile)
+		GetWorld()->GetTimerManager().SetTimer(ResetHandle, this, &AMWEnemyProjectile::ResetState, FlightDuration, false);
 }
 
 void AMWEnemyProjectile::ResetState()
 {
-	if (GetInstigator())
+	if (ensure(GetInstigator()))
 	{
 		if (ResetHandle.IsValid())
 			GetWorld()->GetTimerManager().ClearTimer(ResetHandle);
@@ -69,9 +87,34 @@ void AMWEnemyProjectile::ResetState()
 		SetActorTickEnabled(false);
 
 		SetActorLocation(GetInstigator()->GetActorLocation());
-		ProjectileMoveComp->SetVelocityInLocalSpace(FVector(0.f, 0.f, 0.f));
+		UpdateProjectileComponent(false, nullptr);
 
 		SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		ParticleSystem->Deactivate();
+	}
+}
+
+void AMWEnemyProjectile::UpdateProjectileComponent(bool bIsEnabled, AActor* TargetActor)
+{
+	if (ProjectileMoveComp->bIsHomingProjectile && TargetActor)
+	{
+		ActorToTarget = TargetActor;
+		ProjectileMoveComp->HomingTargetComponent = TargetActor->GetRootComponent();
+		ProjectileMoveComp->HomingAccelerationMagnitude = HomingMagnitude;
+	}
+	else
+	{
+		ActorToTarget = nullptr;
+	}
+
+	if (bIsEnabled)
+	{
+		ProjectileMoveComp->SetUpdatedComponent(RootComponent);
+		ProjectileMoveComp->SetVelocityInLocalSpace(FVector(FlightSpeed, 0.f, 0.f));
+	}
+	else
+	{
+		FHitResult Hit;
+		ProjectileMoveComp->StopSimulating(Hit);
 	}
 }

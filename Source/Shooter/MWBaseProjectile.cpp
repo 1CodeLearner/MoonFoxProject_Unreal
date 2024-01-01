@@ -15,19 +15,27 @@ AMWBaseProjectile::AMWBaseProjectile()
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	RootComponent = SphereComponent;
-	
+
 	ParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ParticleSystemComp"));
 	ParticleSystem->SetupAttachment(RootComponent);
 	ParticleSystem->SetAutoActivate(false);
 
 	ProjectileMoveComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
 	ProjectileMoveComp->ProjectileGravityScale = 0.f;
+
+	bIsHomingProjectile = false;
+
 }
 
 void AMWBaseProjectile::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	ParticleSystem->SetAsset(NiagaraAsset);
+
+	if (bIsHomingProjectile)
+	{
+		ProjectileMoveComp->bIsHomingProjectile = true;
+	}
 }
 
 void AMWBaseProjectile::IgnoreInstigatorActor()

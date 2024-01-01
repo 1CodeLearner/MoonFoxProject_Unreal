@@ -17,6 +17,7 @@ public:
 	AMWEnemyProjectile();
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSecond)override;
 	virtual void PostInitializeComponents() override;
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent,
@@ -24,7 +25,7 @@ protected:
 		bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
-	virtual void Fire(FTransform Transform);
+	virtual void Fire(FTransform Transform, AActor* TargetActor);
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	void ResetState();
@@ -35,4 +36,11 @@ protected:
 private:
 	UPROPERTY()
 	FTimerHandle ResetHandle;
+
+	void UpdateProjectileComponent(bool bIsEnabled, AActor* TargetActor);
+
+	UPROPERTY()
+	AActor* ActorToTarget;
+
+	float ResetValue;
 };

@@ -43,6 +43,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
 	FMWDamageInfo FDamageInfo;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	bool bIsHomingProjectile;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ExposeOnSpawn = "true"))
+	float HomingMagnitude;
+
 protected:
 	void IgnoreInstigatorActor();
 };
